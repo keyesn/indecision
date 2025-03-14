@@ -1,0 +1,46 @@
+services:
+  indecision:
+    image: indecision
+    build:
+      context: ..
+      dockerfile: .devcontainer/Dockerfile
+    command: sleep infinity
+    env_file:
+      - common.env
+      - backend.env
+    depends_on:
+      - db
+      - redis
+    volumes:
+      - ..:/app
+
+  dashboard:
+    image: ghcr.io/indecision/indecision-dashboard:latest
+    restart: unless-stopped
+    ports:
+      - "9000:80"
+
+  db:
+    image: library/postgres:15-alpine
+    ports:
+      - 5432:5432
+    restart: unless-stopped
+    volumes:
+      - indecision-db:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=indecision
+      - POSTGRES_PASSWORD=indecision
+
+  redis:
+    image: library/redis:7.0-alpine
+    restart: unless-stopped
+    volumes:
+      - indecision-redis:/data
+    ports:
+      - 6379:6379
+
+volumes:
+  indecision-db:
+    driver: local
+  indecision-redis:
+    driver: local

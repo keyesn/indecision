@@ -1,0 +1,35 @@
+{
+    "name": "Indecision",
+    "dockerComposeFile": "docker-compose.yml",
+    "service": "indecision",
+    "workspaceFolder": "/app",
+    "forwardPorts": [
+        8000,
+        "dashboard:9000",
+        "db:5432"
+    ],
+    "portsAttributes": {
+        "8000": {
+            "label": "Indecision Core"
+        },
+        "dashboard:9000": {
+            "label": "Indecision Dashboard"
+        },
+        "db:5432": {
+            "label": "PostgresSQL"
+        }
+    },
+    "postCreateCommand": "python manage.py migrate",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "be5invis.toml",
+                "Cameron.vscode-pytest",
+                "charliermarsh.ruff",
+                "editorconfig.editorconfig",
+                "ms-python.python",
+                "ms-python.vscode-pylance"
+            ]
+        }
+    }
+}
